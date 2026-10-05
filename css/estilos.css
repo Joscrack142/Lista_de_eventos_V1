@@ -1,0 +1,469 @@
+/* ========== P2-B · Tablero corregido y mejorado ========== */
+
+body.layout {
+  display: block;
+  padding: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+}
+
+.contenedor {
+  width: min(100% - 32px, 960px);
+  margin-inline: auto;
+}
+
+main.contenedor {
+  padding: 28px 0 48px;
+}
+
+/* ========== APPBAR (Header) ========== */
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 12px rgba(30, 27, 75, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.site-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+}
+
+.logo {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: var(--accent);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nav__link {
+  padding: 9px 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.98rem;
+  font-weight: 500;
+  transition: all 0.22s ease;
+}
+
+.nav__link:hover {
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+.nav__link.is-active {
+  color: var(--accent);
+  background: var(--accent-light);
+  font-weight: 600;
+}
+
+/* ========== Page header ========== */
+.page__header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+
+.page__title {
+  font-family: var(--font-heading);
+  font-size: 1.85rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+  letter-spacing: -0.03em;
+}
+
+.page__subtitle {
+  margin: 5px 0 0;
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+/* ========== Alerta ========== */
+.alert {
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.alert--ok {
+  background: #ECFDF5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+
+/* ========== Tarjetas de eventos ========== */
+.card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 20px;
+}
+
+.card-list .card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1.5px solid #DDD6FE;          /* Borde visible */
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 4px 16px rgba(30, 27, 75, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.card-list .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 30px rgba(30, 27, 75, 0.12);
+  border-color: #C4B5FD;
+}
+
+.card__badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 5px 12px;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.card__title {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;                    /* Más grande */
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 8px;
+  line-height: 1.35;
+}
+
+.card__meta {
+  font-size: 0.95rem;                   /* Más grande */
+  color: var(--text-secondary);
+  margin: 0 0 12px;
+}
+
+.card__text {
+  font-size: 0.95rem;                   /* Más grande */
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.55;
+}
+
+.card__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.form-inline {
+  margin: 0;
+}
+
+/* ========== BOTONES (texto visible) ========== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 22px;
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  font-weight: 500;
+  border-radius: 11px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Botón primario – el más importante */
+.btn-primary {
+  background: var(--accent) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(109, 40, 217, 0.35);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(109, 40, 217, 0.45);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* Botón secundario */
+.btn-secondary {
+  background: #F5F3FF;
+  color: var(--accent);
+  border: 1.5px solid #DDD6FE;
+}
+
+.btn-secondary:hover {
+  background: var(--accent-light);
+  border-color: #C4B5FD;
+  color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: scale(0.97);
+}
+
+/* Botón Borrar */
+.btn-danger {
+  color: #B42318;
+  background: #FEF3F2;
+  border: 1.5px solid #F5C2BC;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 500;
+  transition: all 0.22s ease;
+}
+
+.btn-danger:hover {
+  background: #FEE4E2;
+  border-color: #F04438;
+  color: #912018;
+  transform: translateY(-1px);
+}
+
+.btn-danger:active {
+  transform: scale(0.96);
+}
+
+/* Tamaño pequeño */
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.88rem;
+  border-radius: 9px;
+}
+
+/* ========== Estado vacío ========== */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  margin-top: 32px;
+  border: 2px dashed #DDD6FE;
+  border-radius: 16px;
+  color: var(--text-secondary);
+  background: #FAF5FF;
+}
+
+.empty-state p {
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+
+/* ========== Footer ========== */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 22px 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 50px;
+}/* ========== APPBAR con color diferente y más alto ========== */
+.site-header {
+  background: #4C1D95;                    /* Violeta oscuro elegante */
+  border-bottom: none;
+  box-shadow: 0 4px 20px rgba(76, 29, 149, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  min-height: 10vh;                       /* ≈ 10% de la altura de la pantalla */
+  display: flex;
+  align-items: center;
+}
+
+.site-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100% - 32px, 960px);
+  margin-inline: auto;
+  padding: 18px 0;
+}
+
+.logo {
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: #FFFFFF;                         /* Texto blanco */
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #C4B5FD;                         /* Acento claro */
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nav__link {
+  padding: 9px 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #E9D5FF;                         /* Lila claro */
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.22s ease;
+}
+
+.nav__link:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.nav__link.is-active {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.18);
+  font-weight: 600;
+}
+
+/* ========== BOTÓN + Nuevo evento (texto visible) ========== */
+.btn-primary {
+  background: #6D28D9 !important;
+  color: #FFFFFF !important;              /* Texto blanco forzado */
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(109, 40, 217, 0.4);
+  font-weight: 600;
+  padding: 12px 22px;
+  border-radius: 12px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary:hover {
+  background: #5B21B6 !important;
+  color: #FFFFFF !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(109, 40, 217, 0.5);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.97);
+  color: #FFFFFF !important;
+}
+
+/* ========== Formulario (registrar.php) ========== */
+
+.form-card {
+  max-width: 580px;
+  margin: 0 auto;
+  padding: 32px 28px;
+}
+
+.form-group {
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.required::after {
+  content: " *";
+  color: var(--accent);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 13px 15px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 11px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+.form-group textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 520px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 7px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.form-actions .btn {
+  flex: 1;
+}
