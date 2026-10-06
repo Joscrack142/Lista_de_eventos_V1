@@ -1,3 +1,57 @@
+<?php
+// ========== PROCESAMIENTO ==========
+$errores = [];
+$titulo = $fecha = $hora = $categoria = $descripcion = '';
+
+$categoriasOK = ['trabajo', 'personal', 'estudio', 'ocio', 'salud', 'otro'];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // 1. Recibir
+    $titulo      = trim($_POST['titulo']      ?? '');
+    $fecha       = trim($_POST['fecha']       ?? '');
+    $hora        = trim($_POST['hora']        ?? '');
+    $categoria   = trim($_POST['categoria']   ?? '');
+    $descripcion = trim($_POST['descripcion'] ?? '');
+
+    // 2. Validar
+    if ($titulo === '') {
+        $errores['titulo'] = 'El título es obligatorio.';
+    } elseif (mb_strlen($titulo) > 120) {
+        $errores['titulo'] = 'Máximo 120 caracteres.';
+    }
+
+    if ($fecha === '') {
+        $errores['fecha'] = 'La fecha es obligatoria.';
+    } elseif (!DateTime::createFromFormat('Y-m-d', $fecha)) {
+        $errores['fecha'] = 'La fecha no es válida.';
+    }
+
+    if (!in_array(strtolower($categoria), $categoriasOK, true)) {
+        $errores['categoria'] = 'Elige una categoría válida.';
+    }
+
+    // 3. Si no hay errores → guardar
+    if (empty($errores)) {
+        require 'conexion.php';
+
+        // Convertir hora vacía a NULL
+        $horaDB = ($hora === '') ? null : $hora;
+
+        $sql = "INSERT INTO eventos (titulo, fecha, hora, categoria, descripcion)
+                VALUES (?, ?, ?, ?, ?)";
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param("sssss", $titulo, $fecha, $horaDB, $categoria, $descripcion);
+        $stmt->execute();
+        $stmt->close();
+        $mysqli->close();
+
+        // PRG: redirigir
+        header('Location: index.php?ok=1');
+        exit;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -39,23 +93,43 @@
       </div>
     </div>
 
-    <form class="card form-card" action="guardar-evento.php" method="POST">
+    <?php if (!empty($errores)): ?>
+      <div class="alert alert--error" style="background:#FEF2F2;color:#B91C1C;border:1px solid #FECACA;padding:14px 18px;border-radius:12px;margin-bottom:20px;">
+        Por favor corrige los siguientes errores:
+        <ul style="margin:8px 0 0 18px;">
+          <?php foreach ($errores as $error): ?>
+            <li><?= htmlspecialchars($error) ?></li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+    <?php endif; ?>
 
-      <!-- Título -->
+    <form class="card form-card" method="post" action="">
+
       <div class="form-group">
         <label for="titulo" class="required">Título del evento</label>
-        <input type="text" id="titulo" name="titulo" placeholder="Ej. Reunión con el equipo" required>
+        <input type="text" id="titulo" name="titulo"
+               value="<?= htmlspecialchars($titulo) ?>"
+               placeholder="Ej. Reunión con el equipo" required>
+        <?php if (isset($errores['titulo'])): ?>
+          <p class="hint" style="color:#B91C1C;"><?= htmlspecialchars($errores['titulo']) ?></p>
+        <?php endif; ?>
       </div>
 
       <!-- Fecha y hora -->
       <div class="row">
         <div class="form-group">
           <label for="fecha" class="required">Fecha</label>
-          <input type="date" id="fecha" name="fecha" required>
+          <input type="date" id="fecha" name="fecha"
+                 value="<?= htmlspecialchars($fecha) ?>" required>
+          <?php if (isset($errores['fecha'])): ?>
+            <p class="hint" style="color:#B91C1C;"><?= htmlspecialchars($errores['fecha']) ?></p>
+          <?php endif; ?>
         </div>
         <div class="form-group">
           <label for="hora">Hora de inicio</label>
-          <input type="time" id="hora" name="hora">
+          <input type="time" id="hora" name="hora"
+                 value="<?= htmlspecialchars($hora) ?>">
         </div>
       </div>
 
@@ -89,15 +163,28 @@
 
       <!-- Ubicación -->
       <div class="form-group">
-        <label for="ubicacion">Ubicación</label>
-        <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej. Oficina, Zoom, Casa…">
+        <label for="categoria" class="required">Categoría</label>
+        <select id="categoria" name="categoria" required>
+          <option value="">Seleccionar…</option>
+          <?php
+          $opciones = ['trabajo' => 'Trabajo', 'personal' => 'Personal', 'estudio' => 'Estudio', 'ocio' => 'Ocio', 'salud' => 'Salud', 'otro' => 'Otro'];
+          foreach ($opciones as $valor => $texto):
+          ?>
+            <option value="<?= $valor ?>" <?= $categoria === $valor ? 'selected' : '' ?>>
+              <?= $texto ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+        <?php if (isset($errores['categoria'])): ?>
+          <p class="hint" style="color:#B91C1C;"><?= htmlspecialchars($errores['categoria']) ?></p>
+        <?php endif; ?>
       </div>
 
       <!-- Descripción -->
       <div class="form-group">
         <label for="descripcion">Descripción / Notas</label>
-        <textarea id="descripcion" name="descripcion" placeholder="Añade detalles importantes, enlaces o recordatorios…"></textarea>
-        <p class="hint">Opcional. Puedes usar este espacio para cualquier información extra.</p>
+        <textarea id="descripcion" name="descripcion"
+                  placeholder="Añade detalles importantes…"><?= htmlspecialchars($descripcion) ?></textarea>
       </div>
 
       <!-- Botones -->
@@ -110,10 +197,9 @@
 
   </main>
 
-  <!-- ===== FOOTER ===== -->
   <footer class="site-footer">
     <div class="contenedor">AgendaWeb · Tu nombre · 2026</div>
   </footer>
-    <script src="Js/estilo.js"></script>
+  <script src="Js/estilo.js"></script>
 </body>
 </html>

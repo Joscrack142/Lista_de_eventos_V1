@@ -21,7 +21,7 @@
       <a href="index.php" class="logo">Agenda<span>Web</span></a>
       <nav class="nav">
         <a href="index.php" class="nav__link is-active">Mis eventos</a>
-        <a href="registrar.php" class="nav__link">Nuevo evento</a>
+        <a href="registro.php" class="nav__link">Nuevo evento</a>
       </nav>
     </div>
   </header>
@@ -106,7 +106,7 @@
     <!-- Estado vacío (en P4 solo se muestra si no hay eventos) -->
     <div class="empty-state">
       <p>Aún no tienes eventos registrados.</p>
-      <a href="registrar.php" class="btn btn-primary">Registrar el primero</a>
+      <a href="registro.php" class="btn btn-primary">Registrar el primero</a>
     </div>
 
   </main>
