@@ -4,9 +4,9 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 try {
     $mysqli = new mysqli(
         "localhost",      // host
-        "hector-josue",        // ← cambia esto
-        "hector_josue_db",     // ← cambia esto
-        "agenda"          // nombre de la base
+        "user",        // ← cambia esto
+        "bse",     // ← cambia esto
+        "agenda" 
     );
     $mysqli->set_charset("utf8mb4");
 } catch (mysqli_sql_exception $e) {
